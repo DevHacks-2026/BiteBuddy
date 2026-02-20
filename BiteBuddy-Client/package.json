@@ -17,6 +17,7 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.7",
+    "@react-native-picker/picker": "2.11.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "^54.0.1",
@@ -26,7 +27,8 @@
     "expo-splash-screen": "~31.0.8",
     "expo-status-bar": "~3.0.7",
     "lucide-react": "^0.474.0",
-    "react": "19.1.0",
+    "nativewind": "^4.2.2",
+    "react": "^19.1.0",
     "react-dom": "19.1.0",
     "react-native": "^0.81.5",
     "react-native-reanimated": "~4.1.0",
@@ -42,6 +44,7 @@
   "devDependencies": {
     "@types/react": "~19.1.10",
     "autoprefixer": "^10.4.16",
+    "babel-preset-expo": "^54.0.10",
     "postcss": "^8.4.32",
     "typescript": "~5.9.2"
   },

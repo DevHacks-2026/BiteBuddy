@@ -93,5 +93,10 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  plugins: [require("tailwindcss-animate")],
+  presets: [
+    require("nativewind/preset")
+  ],
+  plugins: [
+    require("tailwindcss-animate"),
+  ],
 };
