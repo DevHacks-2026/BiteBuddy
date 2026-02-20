@@ -10,5 +10,8 @@
     "expo-router"
   ],
   "name": "BiteBuddy-Client",
-  "slug": "BiteBuddy-Client"
+  "slug": "BiteBuddy-Client",
+  "ios": {
+    "bundleIdentifier": "com.anonymous.BiteBuddy-Client"
+  }
 }
