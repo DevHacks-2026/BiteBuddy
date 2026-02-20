@@ -1,0 +1,14 @@
+{
+  "scheme": "acme",
+  "userInterfaceStyle": "automatic",
+  "orientation": "default",
+  "web": {
+    "output": "server",
+    "favicon": "./assets/favicon.png"
+  },
+  "plugins": [
+    "expo-router"
+  ],
+  "name": "BiteBuddy-Client",
+  "slug": "BiteBuddy-Client"
+}
