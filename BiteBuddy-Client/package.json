@@ -8,6 +8,7 @@
     "deploy": "npx expo export -p web && npx eas-cli@latest deploy"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.0.3",
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.5",
