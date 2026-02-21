@@ -1,8 +1,9 @@
 import { Feather, MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     FlatList,
     Image,
+    Pressable,
     SafeAreaView,
     StyleSheet,
     Text,
@@ -55,6 +56,13 @@ const groupsData = [
 
 export default function FriendsScreen() {
     const [activeTab, setActiveTab] = useState('All Friends');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const searchInputRef = useRef<TextInput>(null);
+
+    const handleSearchPress = () => {
+        searchInputRef.current?.focus();
+    };
 
     const renderFriend = ({ item }: any) => (
         <View style={styles.card}>
@@ -116,13 +124,24 @@ export default function FriendsScreen() {
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.searchBar}>
-                    <Feather name="search" size={20} color={COLORS.icon} />
+                <Pressable
+                    style={styles.searchBar}
+                    onPress={handleSearchPress}
+                >
+                    <Feather
+                        name="search"
+                        size={20}
+                        color={COLORS.icon}
+                    />
                     <TextInput
+                        ref={searchInputRef}
                         placeholder="Search friends by name or ID"
                         style={styles.searchInput}
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                        returnKeyType="search"
                     />
-                </View>
+                </Pressable>
 
                 <View style={styles.tabTrack}>
                     <TouchableOpacity
