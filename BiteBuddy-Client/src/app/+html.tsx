@@ -1,4 +1,4 @@
-// import { ScrollViewStyleReset } from "expo-router/html";
+import { ScrollViewStyleReset } from "expo-router/html";
 
 // This file is web-only and used to configure the root HTML for every
 // web page during static rendering.
@@ -15,8 +15,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
 
-        {/* Removing the React Native Web style reset to allow for full body scrolling */}
-        {/* <ScrollViewStyleReset /> */}
+        <ScrollViewStyleReset />
 
         {/* Add any additional <head> elements that you want globally available on web... */}
       </head>
