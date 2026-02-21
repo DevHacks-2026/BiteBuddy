@@ -1,78 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+const tabs = [
+  { key: 'home', label: 'Home', icon: 'home-outline' as const },
+  { key: 'friends', label: 'Friends', icon: 'account-multiple-outline' as const },
+  { key: 'findmate', label: 'Find Mate', icon: 'account-search-outline' as const },
+  { key: 'chats', label: 'Chats', icon: 'chat-outline' as const },
+  { key: 'profile', label: 'Profile', icon: 'account-circle-outline' as const },
+];
+
+const ACTIVE = '#C83B3B';
+const INACTIVE = '#8E9EAB';
+
 const BottomBar = () => {
+  const [activeTab, setActiveTab] = useState('home');
+
   return (
     <View style={styles.container}>
-
-      <TouchableOpacity style={styles.tabItem}>
-        <MaterialCommunityIcons name="view-grid-outline" size={28} color="#C83B3B" />
-        <Text style={[styles.tabText, styles.activeText]}>DASHBOARD</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.tabItem}>
-        <MaterialCommunityIcons name="account-multiple-outline" size={28} color="#8E9EAB" />
-        <Text style={styles.tabText}>FRIENDS</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.tabItem}>
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="chat-outline" size={28} color="#8E9EAB" />
-          <View style={styles.badge} />
-        </View>
-        <Text style={styles.tabText}>CHATS</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.tabItem}>
-        <MaterialCommunityIcons name="account-circle-outline" size={28} color="#8E9EAB" />
-        <Text style={styles.tabText}>PROFILE</Text>
-      </TouchableOpacity>
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.key;
+        return (
+          <TouchableOpacity
+            key={tab.key}
+            style={styles.tabItem}
+            onPress={() => setActiveTab(tab.key)}
+          >
+            <MaterialCommunityIcons
+              name={tab.icon}
+              size={24}
+              color={isActive ? ACTIVE : INACTIVE}
+            />
+            <Text style={[styles.tabText, isActive && styles.activeText]}>
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 8,
+    borderTopColor: '#F0F0F0',
   },
   tabItem: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
   },
-  iconContainer: {
-    position: 'relative',
-  },
-  badge: {
-    position: 'absolute',
-    top: 0,
-    right: -2,
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#C83B3B',
-    borderWidth: 1.5,
-    borderColor: '#FFFFFF',
-  },
   tabText: {
     fontSize: 10,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#8E9EAB',
     marginTop: 4,
-    letterSpacing: 0.5,
   },
   activeText: {
     color: '#C83B3B',
