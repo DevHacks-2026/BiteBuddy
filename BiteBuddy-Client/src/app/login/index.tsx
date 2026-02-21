@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Pressable,
 } from "react-native";
 
 export default function Login() {
@@ -65,7 +66,6 @@ export default function Login() {
             placeholder="Enter your password"
             secureTextEntry
           />
-
           <TouchableOpacity
             style={styles.loginButton}
             onPress={() => router.push("/")}
@@ -73,6 +73,12 @@ export default function Login() {
           >
             <Text style={styles.loginButtonText}>Log in</Text>
           </TouchableOpacity>
+          <Pressable
+            style={styles.registerButton}
+            onPress={() => router.push("/signup")}
+          >
+            <Text style={styles.registerButtonText}>Register</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -136,15 +142,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButton: {
-    backgroundColor: "#A0522D",
+    backgroundColor: "hsl(44, 100%, 59%)",
     height: 52,
     borderRadius: 26,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 8,
+    marginTop: 16,
   },
   loginButtonText: {
-    color: "#FFFFFF",
+    color: "hsl(var(--primary-foreground))",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  registerButton: {
+    marginTop: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  registerButtonText: {
+    color: "hsl(var(--primary-foreground))",
     fontSize: 16,
     fontWeight: "700",
   },
