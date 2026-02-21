@@ -3,11 +3,11 @@
 import DOMProvider from "@/components/dom-provider"
 import { Label } from "@radix-ui/react-dropdown-menu"
 import { useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import { Pressable, Text, TextInput, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Picker } from "@react-native-picker/picker"
 
-export default function Page() {
+export default function Signup() {
     const [formState, setFormState] = useState({
         email: "",
         password: "",
@@ -179,20 +179,12 @@ export default function Page() {
                         </View>
                     </View>
                     <Pressable
-                        className="bg-[hsla(4, 72%, 42%, 1)] mt-4 py-5 rounded-lg items-center"
+                        className="bg-primary mt-4 py-5 rounded-2xl items-center"
                         onPress={handlePressed}>
-                        <Text className="text-white text-base font-bold">Sign up</Text>
+                        <Text className="text-primary-foreground text-base font-bold">Sign up</Text>
                     </Pressable>
                 </SafeAreaView>
             </SafeAreaProvider>
         </DOMProvider>
     )
 }
-
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 16,
-    },
-})
