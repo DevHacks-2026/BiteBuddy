@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -63,7 +66,7 @@ export default function HomeScreen() {
             <Text style={styles.cardSub}>Active messages</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => router.push("/(tabs)/friends")}>
             <View style={[styles.iconCircle, { backgroundColor: "#FADBD8" }]}>
               <MaterialIcons name="people" size={24} color="#C0392B" />
             </View>
