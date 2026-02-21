@@ -14,16 +14,30 @@ export default function Signup() {
         password: "",
         firstName: "",
         lastName: "",
-        day: "",
-        month: "",
-        year: "",
+        dob: {
+            day: "",
+            month: "",
+            year: "",
+        },
         major: "",
         gender: "",
     })
     const router = useRouter();
 
     const handlePressed = () => {
-        router.push("/")
+        const res = fetch("http://localhost:5000/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formState),
+        }).then((response) => {
+            if (response.ok) {
+                router.push("/");
+            }
+        }).catch((error) => {
+            console.error("Signup error:", error);
+        });
     }
 
     const genderSelectOptions = [
@@ -112,9 +126,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="01"
                                             placeholderTextColor="#999"
-                                            value={formState.day}
+                                            value={formState.dob.day}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, day: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, day: text } })
                                             }
                                         />
                                     </View>
@@ -125,9 +139,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="01"
                                             placeholderTextColor="#999"
-                                            value={formState.month}
+                                            value={formState.dob.month}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, month: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, month: text } })
                                             }
                                         />
                                     </View>
@@ -138,9 +152,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="2024"
                                             placeholderTextColor="#999"
-                                            value={formState.year}
+                                            value={formState.dob.year}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, year: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, year: text } })
                                             }
                                         />
                                     </View>

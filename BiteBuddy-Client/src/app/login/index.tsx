@@ -26,6 +26,24 @@ export default function Login() {
     setIsValid(emailPattern.test(text));
   };
 
+  const handleLogin = () => {
+    if (isValid) {
+      const res = fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      }).then((response) => {
+        if (response.ok) {
+          router.push("/");
+        }
+      }).catch((error) => {
+        console.error("Login error:", error);
+      });
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -68,7 +86,7 @@ export default function Login() {
           />
           <TouchableOpacity
             style={styles.loginButton}
-            onPress={() => router.push("/")}
+            onPress={handleLogin}
             activeOpacity={0.8}
           >
             <Text style={styles.loginButtonText}>Log in</Text>

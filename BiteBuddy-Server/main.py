@@ -41,11 +41,7 @@ users = [
     }
 ]
 
-# TODO signup route
-
-# TODO get profile route
-
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET"])
 def login():
     data = request.json
     username = data.get("email")
@@ -64,9 +60,19 @@ def signup():
     data = request.json
     username = data.get("email")
     password = data.get("password")
+    first_name = data.get("firstName")
+    last_name = data.get("lastName")
+    major = data.get("major")
+    dob_day = data.get("dob").get("day")
+    dob_month = data.get("dob").get("month")
+    dob_year = data.get("dob").get("year")
+    gender = data.get("gender")
 
     cursor = get_db().cursor()
-    cursor.execute("INSERT INTO users (email, password) VALUES (?, ?)", (username, password))
+
+    command = """INSERT INTO users (email, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+
+    cursor.execute(command, (username, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender))
     get_db().commit()
     return jsonify({"message": "Signup successful"})
 
@@ -80,10 +86,11 @@ def get_profile(email):
     else:
         return jsonify({"message": "Profile not found"}), 404
 
-
-
 @app.route("/users", methods=["GET"])
 def get_users():
+    cursor = get_db().cursor()
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
     return jsonify(users)
 
 @app.route("/toggle-hungry", methods=["POST"])
