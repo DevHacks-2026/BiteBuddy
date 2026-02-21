@@ -26,7 +26,7 @@ export default function Signup() {
     const router = useRouter();
 
     const handlePressed = async () => {
-        const res = await axios.post("http://localhost:5000/signup", formState)
+        const res = await axios.post("http://0.0.0.0:5001/signup", formState)
             .then((response: AxiosResponse) => {
                 if (response.status === 200) {
                     router.push("/");

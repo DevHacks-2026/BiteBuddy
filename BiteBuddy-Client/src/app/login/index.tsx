@@ -29,7 +29,7 @@ export default function Login() {
 
   const handleLogin = () => {
     if (isValid) {
-      const res = axios.post("http://localhost:5000/login", { email, password })
+      const res = axios.post("http://0.0.0.0:5001/login", { email, password })
         .then((response: AxiosResponse) => {
           if (response.status === 200) {
             console.log("login successful");
