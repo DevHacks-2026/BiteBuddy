@@ -1,99 +1,151 @@
-import { useRouter } from "expo-router/build/exports";
+import { useRouter } from "expo-router";
+import { Video, ResizeMode } from "expo-av";
 import { useState } from "react";
-import { View, StyleSheet, TextInput, Text, Button } from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isValid, setIsValid] = useState(false);
-    const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const router = useRouter();
 
-    const allowedDomains = ['myumanitoba.ca'];
-    const emailPattern = new RegExp(`.+@(${allowedDomains.join('|')})$`);
+  const emailPattern = new RegExp(`.+@(myumanitoba.ca)$`);
 
-    const validateEmail = (email: string) => {
-      return emailPattern.test(email);
-    };
-
-    const handleEmailChange = (email) => {
-      setEmail(email);
-      setIsValid(validateEmail(email));
-    };
-
-    const styles = StyleSheet.create({
-      view: {
-        backgroundColor: '#1a202c',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100%',
-        width: '100%',
-      },
-
-      safeArea: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-        margin: 20,
-        padding: 20,
-        width: '100%',
-        maxWidth: 400,
-      },
-
-      input: {
-        height: 50,
-        marginBottom: 20,
-        borderWidth: 2,
-        padding: 10,
-      },
-
-      email: {
-        borderWidth: 1, 
-        borderColor: isValid || email === '' ? 'gray' : 'red'
-      },
-
-      h2: {
-        fontSize: 24, 
-        fontWeight: 'bold', 
-        marginBottom: 20
-      },
-
-      label: {
-        fontSize: 16, 
-        marginBottom: 10
-      },
-    });
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    setIsValid(emailPattern.test(text));
+  };
 
   return (
-    <View style={styles.view}>
-      <SafeAreaProvider style={styles.safeArea}>
-        <SafeAreaView>
-          <Text style={styles.h2}>Login</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent} bounces={false}>
+        <View style={styles.videoSection}>
+          <Video
+            source={require("../../../assets/video-crop.mp4")}
+            style={StyleSheet.absoluteFill}
+            resizeMode={ResizeMode.COVER}
+            shouldPlay
+            isLooping
+            isMuted
+          />
+          <Text style={styles.overlayText}>BiteBuddy</Text>
+        </View>
+
+        <View style={styles.bottomSection}>
           <Text style={styles.label}>Email</Text>
           <TextInput
-            style={[styles.input, styles.email]}
+            style={[styles.input, { borderColor: isValid || !email ? "#D1D5DB" : "red" }]}
             onChangeText={handleEmailChange}
             value={email}
             placeholder="username@myumanitoba.ca"
             keyboardType="email-address"
+            autoCapitalize="none"
           />
-          {!isValid && email !== '' && <Text style={{ color: 'red' }}>Invalid email format</Text>}
+          {!isValid && email !== "" && (
+            <Text style={styles.errorText}>Invalid email format</Text>
+          )}
 
           <Text style={styles.label}>Password</Text>
-            <TextInput
+          <TextInput
             style={styles.input}
             onChangeText={setPassword}
             value={password}
             placeholder="Enter your password"
-            secureTextEntry={true}
+            secureTextEntry
           />
 
-          <Button
-            title="Login"
-            onPress={() => router.push('/')}
-          />
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </View>
-  ) ;
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => router.push("/")}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.loginButtonText}>Log in</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  videoSection: {
+    height: 450,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomLeftRadius: 60,
+    borderBottomRightRadius: 60,
+    overflow: "hidden",
+  },
+  overlayText: {
+    position: "absolute",
+    top: 80,
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#FFFFFF",
+    letterSpacing: 1,
+    textShadowColor: "rgba(0,0,0,0.3)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  bottomSection: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 28,
+    paddingTop: 40,
+    paddingBottom: 40,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 6,
+  },
+  input: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    marginBottom: 14,
+    fontSize: 15,
+    backgroundColor: "#F9FAFB",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
+  },
+  loginButton: {
+    backgroundColor: "#A0522D",
+    height: 52,
+    borderRadius: 26,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 8,
+  },
+  loginButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+});
