@@ -130,6 +130,9 @@ def init_db():
                 gender TEXT
             )
         ''')
+        cursor.execute('''
+            INSERT INTO USERS (email, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', ("test@myumanitoba.ca", "asdf", "Jordon", "Hong", "Computer Science", 1, 1, 2003, "male"))
         db.commit()
 
 if __name__ == "__main__":
