@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 DATABASE = 'bitebuddy.db'
 
@@ -57,6 +57,7 @@ def login():
 
 @app.route("/signup", methods=["POST"])
 def signup():
+    print("signing up")
     data = request.json
     email = data.get("email")
     password = data.get("password")
@@ -134,4 +135,4 @@ def init_db():
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5001)
