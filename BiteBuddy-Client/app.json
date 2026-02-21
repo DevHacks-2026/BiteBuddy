@@ -12,6 +12,7 @@
   "name": "BiteBuddy-Client",
   "slug": "BiteBuddy-Client",
   "ios": {
-    "bundleIdentifier": "com.anonymous.BiteBuddy-Client"
+    "bundleIdentifier": "com.anonymous.BiteBuddy-Client",
+    "googleMapsApiKey":  "process.env.MAPS_API_KEY"
   }
 }
