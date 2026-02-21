@@ -8,10 +8,10 @@ export default function Layout() {
   return (
     <>
       <Head>
-        <title>Dashboard | Expo App</title>
+        <title>BiteBuddy</title>
         <meta
-          name="description"
-          content="High-performance dashboard built with Expo Router"
+          name="BiteBuddy"
+          content="BiteBuddy is your go-to app for finding the perfect lunch companion."
         />
       </Head>
       <TooltipProvider>
