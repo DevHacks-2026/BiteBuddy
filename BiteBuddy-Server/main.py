@@ -1,9 +1,9 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g
 from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}})
 
 DATABASE = 'bitebuddy.db'
 
@@ -41,14 +41,14 @@ users = [
     }
 ]
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["POST"])
 def login():
     data = request.json
-    username = data.get("email")
+    email = data.get("email")
     password = data.get("password")
 
     cursor = get_db().cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", (username, password))
+    cursor.execute("SELECT * FROM USERS WHERE email = ? AND password = ?", (email, password))
     user = cursor.fetchone()
     if user:
         return jsonify({"message": "Login successful", "user": user})
@@ -58,7 +58,7 @@ def login():
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.json
-    username = data.get("email")
+    email = data.get("email")
     password = data.get("password")
     first_name = data.get("firstName")
     last_name = data.get("lastName")
@@ -70,16 +70,16 @@ def signup():
 
     cursor = get_db().cursor()
 
-    command = """INSERT INTO users (email, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    command = """INSERT INTO USERS (email, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
-    cursor.execute(command, (username, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender))
+    cursor.execute(command, (email, password, first_name, last_name, major, dob_day, dob_month, dob_year, gender))
     get_db().commit()
     return jsonify({"message": "Signup successful"})
 
 @app.route("/profile/<string:email>", methods=["GET"])
 def get_profile(email):
     cursor = get_db().cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    cursor.execute("SELECT * FROM USERS WHERE email = ?", (email,))
     user = cursor.fetchone()
     if user:
         return jsonify({"message": "Profile retrieved", "user": user})
@@ -111,5 +111,27 @@ def home():
     return jsonify({"message": "BiteBuddy API running"})
 
 
+def init_db():
+    with app.app_context():
+        print("Initializing database...")
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS USERS (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                major TEXT,
+                dob_day INTEGER,
+                dob_month INTEGER,
+                dob_year INTEGER,
+                gender TEXT
+            )
+        ''')
+        db.commit()
+
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True, port=5000)

@@ -12,6 +12,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
+import axios, { AxiosResponse } from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -28,19 +29,16 @@ export default function Login() {
 
   const handleLogin = () => {
     if (isValid) {
-      const res = fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      }).then((response) => {
-        if (response.ok) {
-          router.push("/");
-        }
-      }).catch((error) => {
-        console.error("Login error:", error);
-      });
+      const res = axios.post("http://localhost:5000/login", { email, password })
+        .then((response: AxiosResponse) => {
+          if (response.status === 200) {
+            console.log("login successful");
+            router.push("/");
+          }
+        })
+        .catch((error) => {
+          console.error("Login error:", error);
+        });
     }
   }
 

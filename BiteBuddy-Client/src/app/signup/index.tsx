@@ -7,6 +7,7 @@ import { Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Picker } from "@react-native-picker/picker"
 import { useRouter } from "expo-router";
+import axios, { AxiosResponse } from "axios";
 
 export default function Signup() {
     const [formState, setFormState] = useState({
@@ -24,20 +25,16 @@ export default function Signup() {
     })
     const router = useRouter();
 
-    const handlePressed = () => {
-        const res = fetch("http://localhost:5000/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formState),
-        }).then((response) => {
-            if (response.ok) {
-                router.push("/");
-            }
-        }).catch((error) => {
-            console.error("Signup error:", error);
-        });
+    const handlePressed = async () => {
+        const res = await axios.post("http://localhost:5000/signup", formState)
+            .then((response: AxiosResponse) => {
+                if (response.status === 200) {
+                    router.push("/");
+                }
+            })
+            .catch((error) => {
+                console.error("Signup error:", error);
+            });
     }
 
     const genderSelectOptions = [
