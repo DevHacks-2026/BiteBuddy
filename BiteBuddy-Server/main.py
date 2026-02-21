@@ -1,8 +1,23 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import sqlite3
 
 app = Flask(__name__)
 CORS(app)
+
+DATABASE = 'bitebuddy.db'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 # Fake in-memory data
 users = [
@@ -25,6 +40,47 @@ users = [
         "hungry": True
     }
 ]
+
+# TODO signup route
+
+# TODO get profile route
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    username = data.get("email")
+    password = data.get("password")
+
+    cursor = get_db().cursor()
+    cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", (username, password))
+    user = cursor.fetchone()
+    if user:
+        return jsonify({"message": "Login successful", "user": user})
+    else:
+        return jsonify({"message": "Login failed"}), 401
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.json
+    username = data.get("email")
+    password = data.get("password")
+
+    cursor = get_db().cursor()
+    cursor.execute("INSERT INTO users (email, password) VALUES (?, ?)", (username, password))
+    get_db().commit()
+    return jsonify({"message": "Signup successful"})
+
+@app.route("/profile/<string:email>", methods=["GET"])
+def get_profile(email):
+    cursor = get_db().cursor()
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
+    if user:
+        return jsonify({"message": "Profile retrieved", "user": user})
+    else:
+        return jsonify({"message": "Profile not found"}), 404
+
+
 
 @app.route("/users", methods=["GET"])
 def get_users():
