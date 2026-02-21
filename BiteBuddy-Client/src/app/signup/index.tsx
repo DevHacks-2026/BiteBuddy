@@ -7,6 +7,7 @@ import { Pressable, ScrollView, Text, TextInput, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Picker } from "@react-native-picker/picker"
 import { useRouter } from "expo-router";
+import axios, { AxiosResponse } from "axios";
 
 export default function Signup() {
     const [formState, setFormState] = useState({
@@ -14,16 +15,26 @@ export default function Signup() {
         password: "",
         firstName: "",
         lastName: "",
-        day: "",
-        month: "",
-        year: "",
+        dob: {
+            day: "",
+            month: "",
+            year: "",
+        },
         major: "",
         gender: "",
     })
     const router = useRouter();
 
-    const handlePressed = () => {
-        router.push("/")
+    const handlePressed = async () => {
+        const res = await axios.post("http://localhost:5000/signup", formState)
+            .then((response: AxiosResponse) => {
+                if (response.status === 200) {
+                    router.push("/");
+                }
+            })
+            .catch((error) => {
+                console.error("Signup error:", error);
+            });
     }
 
     const genderSelectOptions = [
@@ -112,9 +123,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="01"
                                             placeholderTextColor="#999"
-                                            value={formState.day}
+                                            value={formState.dob.day}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, day: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, day: text } })
                                             }
                                         />
                                     </View>
@@ -125,9 +136,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="01"
                                             placeholderTextColor="#999"
-                                            value={formState.month}
+                                            value={formState.dob.month}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, month: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, month: text } })
                                             }
                                         />
                                     </View>
@@ -138,9 +149,9 @@ export default function Signup() {
                                             keyboardType="number-pad"
                                             placeholder="2024"
                                             placeholderTextColor="#999"
-                                            value={formState.year}
+                                            value={formState.dob.year}
                                             onChangeText={(text) =>
-                                                setFormState({ ...formState, year: text })
+                                                setFormState({ ...formState, dob: { ...formState.dob, year: text } })
                                             }
                                         />
                                     </View>
